@@ -5,6 +5,7 @@ from torch import nn, optim
 from utils.metrics import *
 from utils.pytorchtools import *
 from utils.util import *
+from utils.metrics import *
 from base.base_trainer import BaseTrainer
 from logger.logger import *
 
@@ -49,9 +50,15 @@ class Trainer(BaseTrainer):
         self.model.train()
         all_loss = 0
         for step, batch in enumerate(self.train_dataloader):
-            batch = real_batch(batch)
+            # batch = real_batch(batch)
             out = self.model(batch['item1'], batch['item2'], self.config['trainer']['task'])[0]
-            loss = self.criterion(out, torch.FloatTensor(batch['label']).cuda())
+            # if self.config['trainer']['task'] == "vert_classify":
+            #   print("Warrning Please use torch tensor instead of torch FloatTensor in line 56 trainer for loss")
+            loss = self.criterion(out, torch.tensor(batch['label']).cuda())
+            # print(len(out))
+            # print(len(batch['label']))
+            # print(loss)
+            # print(str(step))
             all_loss = all_loss + loss
             self.optimizer.zero_grad()
             loss.backward()
@@ -80,9 +87,10 @@ class Trainer(BaseTrainer):
 
             y_pred.extend(out)
         truth = self.test_data['label']
-        auc_score = cal_auc(y_pred, truth)
-        print("auc socre: " + str(auc_score))
-        return auc_score
+        # auc_score = cal_auc(y_pred, truth)
+        # print("auc socre: " + str(auc_score))
+        score = evaluate(y_pred, truth, self.test_data, self.config['trainer']['task'])
+        return score
 
     def _save_checkpoint(self, epoch, save_best=False):
         """
@@ -107,6 +115,7 @@ class Trainer(BaseTrainer):
         valid_scores = []
         early_stopping = EarlyStopping(patience=self.config['trainer']['early_stop'], verbose=True)
         for epoch in range(self.start_epoch, self.epochs+1):
+            print(str(epoch)+' epoch of '+str(self.epochs+1)+' is running.')
             self._train_epoch(epoch)
             valid_socre = self._valid_epoch(epoch)
             valid_scores.append(valid_socre)

@@ -7,9 +7,9 @@ from parse_config import ConfigParser
 import os
 
 def main(config):
-    #data = load_data_mind(config)
-    with open("./data/data_mind_small.pkl", 'rb') as f:
-        data = pickle.load(f)
+    data = load_data_mind(config)
+    # with open("./data/data_mind_small.pkl", 'rb') as f:
+    #     data = pickle.load(f)
     if config['trainer']['training_type'] == "single_task":
         single_task_training(config, data)
     else:
