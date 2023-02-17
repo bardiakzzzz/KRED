@@ -150,7 +150,9 @@ class News_embedding(nn.Module):
         istitle_embedding = self.get_title_embedding(istitle)
         type_embedding = self.get_type_embedding(type)
         kgat_entity_embeddings = self.kgat(entities)  # batch(news num) * entity num
-        news_entity_embedding = kgat_entity_embeddings + entity_num_embedding + istitle_embedding + type_embedding #todo
+        #news_entity_embedding = kgat_entity_embeddings + entity_num_embedding + istitle_embedding + type_embedding #todo
+
+        news_entity_embedding = kgat_entity_embeddings + istitle_embedding + entity_num_embedding #todo
 
         aggregate_embedding, topk_index = self.attention_layer(news_entity_embedding, torch.FloatTensor(context_vecs).cuda())
 
