@@ -18,7 +18,7 @@ data:
 
 
 model:
-  document_embedding_dim: 768
+  document_embedding_dim: 384
   embedding_dim: 100
   news_entity_num: 20
   entity_neighbor_num: 20
