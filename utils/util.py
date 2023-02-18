@@ -465,10 +465,10 @@ def build_vert_data(config):
     fp_train_news = open(config['data']['train_news'], 'r', encoding='utf-8')
     for line in fp_train_news:
         newsid, vert, subvert, title, abstract, url, entity_info_title, entity_info_abstract = line.strip().split('\t')
-        if vert not in vert_label_dict:
-            vert_label_dict[vert] = label_index
+        if subvert not in vert_label_dict:
+            vert_label_dict[subvert] = label_index
             label_index = label_index + 1
-        all_news_data.append((newsid, vert_label_dict[vert]))
+        all_news_data.append((newsid, vert_label_dict[subvert]))
     print(vert_label_dict)
     for i in range(len(all_news_data)):
         if random.random()<0.8:

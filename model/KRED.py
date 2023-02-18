@@ -39,7 +39,7 @@ class KREDModel(nn.Module):
         self.softmax = nn.Softmax(dim=-1)
 
         self.vert_mlp_layer1 = nn.Linear(self.config['model']['embedding_dim'], self.config['model']['layer_dim'])
-        self.vert_mlp_layer2 = nn.Linear(self.config['model']['layer_dim'], 17)
+        self.vert_mlp_layer2 = nn.Linear(self.config['model']['layer_dim'], 263)
 
     def forward(self, user_features, news_features, task):
         candidate_news_embedding, topk_index = self.news_embedding(news_features)
